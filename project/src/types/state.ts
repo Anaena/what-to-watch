@@ -1,5 +1,5 @@
 import store from '../store';
-import type {Film, Comment, User, Genre} from './types';
+import {Film, Comment, User, Genre, GenreName} from './types';
 import {AuthorizationStatus} from '../const';
 
 export type SiteData = {
@@ -15,7 +15,7 @@ export type SiteData = {
 };
 
 export type SiteProcess = {
-  currentGenre: Genre;
+  currentGenre: GenreName;
 };
 
 export type UserProcess = {

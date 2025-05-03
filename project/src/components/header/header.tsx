@@ -4,13 +4,17 @@ import {useAppSelector} from '../../hooks';
 import {getAuthorizationStatus, getUser} from '../../store/user-process/selectors';
 import Logo from '../logo/logo';
 
-const Header = () => {
+type HeaderProps = {
+  page?: 'main' | 'other';
+}
+
+const Header = ({page}: HeaderProps) => {
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const user = useAppSelector(getUser);
 
   return (
     <header className="page-header film-card__head">
-      <Logo />
+      <Logo page={page} />
 
       <ul className="user-block">
         <li className="user-block__item">

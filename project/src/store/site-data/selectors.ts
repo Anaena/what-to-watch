@@ -15,4 +15,4 @@ export const getPromoFilm = ({ [StoreSlice.SiteData]: SITE_DATA }: State): Film 
 
 export const selectFilms = createSelector(
   [getFilms, getGenre],
-  (films, genre) => films.filter((film) => genre === 'All genres' ? film : film.genre === genre));
+  (films, genre) => films.filter((film) => genre === 'All genres' ? films : film.genre === genre));

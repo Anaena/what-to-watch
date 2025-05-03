@@ -1,4 +1,4 @@
-import {genres} from '../const';
+import {genreMap, genres} from '../const';
 
 export type Token = string;
 
@@ -40,3 +40,4 @@ export type Comment = {
 
 export type UserAuth = Pick<User, 'email'> & { password: string };
 export  type Genre = typeof genres[number];
+export type GenreName = keyof typeof genreMap;

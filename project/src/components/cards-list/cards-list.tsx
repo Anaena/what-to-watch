@@ -10,7 +10,7 @@ const CardList = (): JSX.Element => {
   if (isFilmsLoading) {
     return <Spinner />;
   }
-  console.log('* LOG films', films);
+
   return (
     <div className="catalog__films-list">
       {films.map((film) => (

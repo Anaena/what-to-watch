@@ -3,6 +3,7 @@ import {useAppSelector} from '../../hooks';
 import {getIsPromoFilmLoading, getPromoFilm} from '../../store/site-data/selectors';
 import Catalog from '../../components/catalog/catalog';
 import Spinner from '../../components/spinner/spinner';
+import Logo from '../../components/logo/logo';
 
 function MainPage(): JSX.Element {
   const promoFilm = useAppSelector(getPromoFilm);
@@ -21,7 +22,7 @@ function MainPage(): JSX.Element {
 
         <h1 className="visually-hidden">WTW</h1>
 
-        <Header />
+        <Header page={'main'}/>
 
         <div className="film-card__wrap">
           <div className="film-card__info">
@@ -59,13 +60,7 @@ function MainPage(): JSX.Element {
         <Catalog />
 
         <footer className="page-footer">
-          <div className="logo">
-            <a className="logo__link logo__link--light">
-              <span className="logo__letter logo__letter--1">W</span>
-              <span className="logo__letter logo__letter--2">T</span>
-              <span className="logo__letter logo__letter--3">W</span>
-            </a>
-          </div>
+          <Logo page={'main'} isLight={true}/>
 
           <div className="copyright">
             <p>© 2019 What to watch Ltd.</p>
