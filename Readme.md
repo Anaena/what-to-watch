@@ -1,4 +1,4 @@
-# Личный проект «{{projectTitle}}»
+# Личный проект «What to watch»
 
 * Студент: [{{userName}}]({{userProfile}}).
 * Наставник: `Неизвестно`.
