@@ -1,6 +1,6 @@
 import {useCallback} from 'react';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {setGenre} from '../../store/site-process/site-process';
+import {resetFilmsCount, setGenre} from '../../store/site-process/site-process';
 import {getGenre} from '../../store/site-process/selectors';
 import {Genre} from '../../types/types';
 import {genreMap, genres} from '../../const';
@@ -12,6 +12,7 @@ const GenresList = (): JSX.Element => {
 
   const handleCityClick = useCallback((name: Genre) => {
     dispatch(setGenre(name));
+    dispatch(resetFilmsCount());
   }, [dispatch]);
 
   return (

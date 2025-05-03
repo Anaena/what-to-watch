@@ -16,6 +16,7 @@ export type SiteData = {
 
 export type SiteProcess = {
   currentGenre: GenreName;
+  filmsCount: number;
 };
 
 export type UserProcess = {
