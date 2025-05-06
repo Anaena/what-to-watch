@@ -16,10 +16,10 @@ export const Action = {
   FETCH_FILM: 'film/fetch',
   FETCH_PROMO: 'promo/fetch',
   SET_GENRE: 'genre/set',
-  // FETCH_FAVORITE_OFFERS: 'offers/fetch-favorite',
+  FETCH_FAVORITE_FILMS: 'films/fetch-favorite',
+  POST_FAVORITE: 'films/post-favorite',
   // FETCH_COMMENTS: 'offer/fetch-comments',
   // POST_COMMENT: 'offer/post-comment',
-  // POST_FAVORITE: 'offer/post-favorite',
   LOGIN_USER: 'user/login',
   FETCH_USER_STATUS: 'user/fetch-status',
   LOGOUT_USER: 'user/logout',
@@ -92,6 +92,15 @@ export const fetchPromoFilm = createAsyncThunk<Film, undefined, { extra: Extra }
   async (_, { extra }) => {
     const { api } = extra;
     const { data } = await api.get<Film>(ApiRoute.Promo);
+
+    return data;
+  });
+
+export const fetchFavoriteFilms = createAsyncThunk<Film[], undefined, { extra: Extra }>(
+  Action.FETCH_FAVORITE_FILMS,
+  async (_, { extra }) => {
+    const { api } = extra;
+    const { data } = await api.get<Film[]>(ApiRoute.Favorite);
 
     return data;
   });

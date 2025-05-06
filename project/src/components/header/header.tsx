@@ -6,22 +6,29 @@ import Logo from '../logo/logo';
 
 type HeaderProps = {
   page?: 'main' | 'other';
+  title?: string;
 }
 
-const Header = ({page}: HeaderProps) => {
+const Header = ({page, title}: HeaderProps) => {
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const user = useAppSelector(getUser);
 
   return (
-    <header className="page-header film-card__head">
+    <header className={`page-header ${title ? 'user-page__head' : 'film-card__head'}`}>
       <Logo page={page} />
+
+      {title && (
+        <h1 className="page-title user-page__title">{title}</h1>
+      )}
 
       <ul className="user-block">
         {authorizationStatus === AuthorizationStatus.Auth && (
           <li className="user-block__item">
-            <div className="user-block__avatar">
-              <img src={user} alt="User avatar" width="63" height="63"/>
-            </div>
+            <Link className="user-block__avatar" to={AppRoute.Favorites}>
+              <div className="user-block__avatar">
+                <img src={user} alt="User avatar" width="63" height="63"/>
+              </div>
+            </Link>
           </li>
         )}
         <li className="user-block__item">

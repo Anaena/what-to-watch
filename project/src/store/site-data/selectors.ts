@@ -16,3 +16,6 @@ export const getPromoFilm = ({ [StoreSlice.SiteData]: SITE_DATA }: State): Film 
 export const selectFilms = createSelector(
   [getFilms, getGenre],
   (films, genre) => films.filter((film) => genre === 'All genres' ? films : film.genre === genre));
+
+export const getIsFavoriteFilmsLoading = ({ [StoreSlice.SiteData]: SITE_DATA }: State): boolean => SITE_DATA.isFavoriteFilmsLoading;
+export const getFavoriteFilms = ({ [StoreSlice.SiteData]: SITE_DATA}: State): Film[] => SITE_DATA.favoriteFilms;
