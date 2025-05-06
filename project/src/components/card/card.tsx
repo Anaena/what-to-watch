@@ -1,4 +1,5 @@
 import type {Film} from '../../types/types';
+import {AppRoute} from '../../const';
 
 const Card = ({
   id,
@@ -24,7 +25,7 @@ const Card = ({
       <img src={posterImage} alt={name} width="280" height="175"/>
     </div>
     <h3 className="small-film-card__title">
-      <a className="small-film-card__link" href="film-page.html">{name}</a>
+      <a className="small-film-card__link" href={`${AppRoute.Film}/${id}`}>{name}</a>
     </h3>
   </article>
 );

@@ -4,7 +4,7 @@ export const MAX_GENRES_COUNT = 9;
 export enum AppRoute {
   Root = '/',
   Login = '/login',
-  Films = '/films',
+  Film = '/films',
   Favorites = '/mylist',
   Player = '/player',
   NotFound = '/404'
