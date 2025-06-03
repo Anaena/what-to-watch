@@ -1,12 +1,16 @@
-import {useEffect} from "react";
+import {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {fetchFilm} from '../../store/action';
 import {getFilm, getIsFilmLoading} from '../../store/site-data/selectors';
 import Spinner from '../../components/spinner/spinner';
 import Header from '../../components/header/header';
-import Logo from "../../components/logo/logo";
-// import {getAuthorizationStatus} from '"'../../store/user-process/selectors";
+import Logo from '../../components/logo/logo';
+import Overview from '../../components/overview/overview';
+import {TabsName} from '../../const';
+import Details from '../../components/details/details';
+import FilmTab from '../../components/film-tab/film-tab';
+// import {getAuthorizationStatus} from '../../store/user-process/selectors';
 
 function MoviePage(): JSX.Element {
   const params = useParams();
@@ -15,6 +19,7 @@ function MoviePage(): JSX.Element {
   const film = useAppSelector(getFilm);
   const isFilmLoading = useAppSelector(getIsFilmLoading);
   // const comments = useAppSelector(getComments);
+  const [activeTab, setActiveTab] = useState(TabsName.OVERVIEW);
 
   useEffect(() => {
     const { id } = params;
@@ -30,7 +35,7 @@ function MoviePage(): JSX.Element {
   }
 
   if (!film) {
-    return null;
+    return;
   }
 
   const { id, name, posterImage, previewImage, backgroundImage, backgroundColor, videoLink, previewVideoLink, description, rating, scoresCount, director, starring, runTime, genre, released, isFavorite } = film;
@@ -77,40 +82,24 @@ function MoviePage(): JSX.Element {
         <div className="film-card__wrap film-card__translate-top">
           <div className="film-card__info">
             <div className="film-card__poster film-card__poster--big">
-              <img src={posterImage} alt={name} width="218"
-                   height="327"/>
+              <img src={posterImage} alt={name} width="218" height="327"/>
             </div>
 
             <div className="film-card__desc">
               <nav className="film-nav film-card__nav">
                 <ul className="film-nav__list">
-                  <li className="film-nav__item film-nav__item--active">
-                    <a href="#" className="film-nav__link">Overview</a>
-                  </li>
-                  <li className="film-nav__item">
-                    <a href="#" className="film-nav__link">Details</a>
-                  </li>
-                  <li className="film-nav__item">
-                    <a href="#" className="film-nav__link">Reviews</a>
-                  </li>
+                  {Object.values(TabsName).map((tabName) => (
+                    <FilmTab tabName={tabName} key={tabName} isActive={tabName === activeTab} onClick={() => setActiveTab(tabName)}/>
+                  ))}
                 </ul>
               </nav>
 
-              <div className="film-rating">
-                <div className="film-rating__score">{rating}</div>
-                <p className="film-rating__meta">
-                  <span className="film-rating__level">Very good</span>
-                  <span className="film-rating__count">{scoresCount}</span>
-                </p>
-              </div>
-
-              <div className="film-card__text">
-                <p>{description}</p>
-
-                <p className="film-card__director"><strong>{`Director: ${director}`}</strong></p>
-
-                <p className="film-card__starring"><strong>{`Starring: ${starring}`}</strong></p>
-              </div>
+              {activeTab === TabsName.OVERVIEW && (
+                <Overview rating={rating} scoresCount={scoresCount} description={description} director={director} starring={starring} />
+              )}
+              {activeTab === TabsName.DETAILS && (
+                <Details runTime={runTime} genre={genre} released={released} director={director} starring={starring} />
+              )}
             </div>
           </div>
         </div>
@@ -123,12 +112,10 @@ function MoviePage(): JSX.Element {
           <div className="catalog__films-list">
             <article className="small-film-card catalog__films-card">
               <div className="small-film-card__image">
-                <img src="img/fantastic-beasts-the-crimes-of-grindelwald.jpg"
-                     alt="Fantastic Beasts: The Crimes of Grindelwald" width="280" height="175"/>
+                <img src="img/fantastic-beasts-the-crimes-of-grindelwald.jpg" alt="Fantastic Beasts: The Crimes of Grindelwald" width="280" height="175"/>
               </div>
               <h3 className="small-film-card__title">
-                <a className="small-film-card__link" href="film-page.html">Fantastic Beasts: The Crimes of
-                  Grindelwald</a>
+                <a className="small-film-card__link" href="film-page.html">Fantastic Beasts: The Crimes of Grindelwald</a>
               </h3>
             </article>
 
@@ -172,7 +159,7 @@ function MoviePage(): JSX.Element {
         </footer>
       </div>
     </>
-  )
-};
+  );
+}
 
 export default MoviePage;

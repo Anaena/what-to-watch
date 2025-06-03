@@ -30,6 +30,11 @@ export enum AuthorizationStatus {
   Unknown = 'UNKNOWN',
 }
 
+export enum TabsName {
+  OVERVIEW = 'Overview',
+  DETAILS = 'Details',
+  REVIEWS = 'Reviews',
+}
 
 export enum StoreSlice {
   SiteData = 'SITE_DATA',
