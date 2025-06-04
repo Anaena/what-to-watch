@@ -21,7 +21,7 @@ function MoviePage(): JSX.Element | null {
   const film = useAppSelector(getFilm);
   const isFilmLoading = useAppSelector(getIsFilmLoading);
   const comments = useAppSelector(getComments);
-  const [activeTab, setActiveTab] = useState(TabsName.OVERVIEW);
+  const [activeTab, setActiveTab] = useState('Overview');
 
   useEffect(() => {
     const { id } = params;
@@ -32,7 +32,7 @@ function MoviePage(): JSX.Element | null {
     }
   }, [params, dispatch]);
 
-  const handleTabClick = useCallback((tab:TabName) => {
+  const handleTabClick = useCallback((tab:TabName):void => {
     setActiveTab(tab);
   }, []);
 
@@ -100,13 +100,13 @@ function MoviePage(): JSX.Element | null {
                 </ul>
               </nav>
 
-              {activeTab === TabsName.OVERVIEW && (
+              {activeTab === TabsName.Overview && (
                 <Overview rating={rating} scoresCount={scoresCount} description={description} director={director} starring={starring} />
               )}
-              {activeTab === TabsName.DETAILS && (
+              {activeTab === TabsName.Details && (
                 <Details runTime={runTime} genre={genre} released={released} director={director} starring={starring} />
               )}
-              {activeTab === TabsName.REVIEWS && (
+              {activeTab === TabsName.Reviews && (
                 <Reviews reviews={comments}/>
               )}
             </div>

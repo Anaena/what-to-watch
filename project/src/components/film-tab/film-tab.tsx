@@ -2,7 +2,7 @@ import {memo} from 'react';
 import {TabName} from '../../types/types';
 
 type FilmTab = {
-  tabName: string;
+  tabName: TabName;
   isActive: boolean;
   onClick: (tab:TabName) => void;
 }

@@ -31,9 +31,9 @@ export enum AuthorizationStatus {
 }
 
 export enum TabsName {
-  OVERVIEW = 'Overview',
-  DETAILS = 'Details',
-  REVIEWS = 'Reviews',
+  Overview = 'Overview',
+  Details = 'Details',
+  Reviews = 'Reviews',
 }
 
 export enum StoreSlice {
