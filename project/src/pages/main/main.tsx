@@ -60,7 +60,7 @@ function MainPage(): JSX.Element {
         <Catalog />
 
         <footer className="page-footer">
-          <Logo page={'main'} isLight={true}/>
+          <Logo page={'main'} isLight />
 
           <div className="copyright">
             <p>© 2019 What to watch Ltd.</p>
