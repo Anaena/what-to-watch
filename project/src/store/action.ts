@@ -4,7 +4,7 @@ import type { History } from 'history';
 
 import {ApiRoute, AppRoute, HttpCode} from '../const';
 import {dropToken, saveToken} from '../services/token';
-import {Film, Genre, User, UserAuth} from '../types/types';
+import {ReviewAuth, Film, Genre, Review, User, UserAuth} from '../types/types';
 
 type Extra = {
   api: AxiosInstance;
@@ -18,8 +18,8 @@ export const Action = {
   SET_GENRE: 'genre/set',
   FETCH_FAVORITE_FILMS: 'films/fetch-favorite',
   POST_FAVORITE: 'films/post-favorite',
-  // FETCH_COMMENTS: 'offer/fetch-comments',
-  // POST_COMMENT: 'offer/post-comment',
+  FETCH_COMMENTS: 'film/fetch-comments',
+  POST_COMMENT: 'film/post-comment',
   LOGIN_USER: 'user/login',
   FETCH_USER_STATUS: 'user/fetch-status',
   LOGOUT_USER: 'user/logout',
@@ -101,6 +101,24 @@ export const fetchFavoriteFilms = createAsyncThunk<Film[], undefined, { extra: E
   async (_, { extra }) => {
     const { api } = extra;
     const { data } = await api.get<Film[]>(ApiRoute.Favorite);
+
+    return data;
+  });
+
+export const fetchComments = createAsyncThunk<Review[], Film['id'], { extra: Extra }>(
+  Action.FETCH_COMMENTS,
+  async (id, { extra }) => {
+    const { api } = extra;
+    const { data } = await api.get<Review[]>(`${ApiRoute.Comments}/${id}`);
+
+    return data;
+  });
+
+export const postComment = createAsyncThunk<Review[], ReviewAuth, { extra: Extra }>(
+  Action.POST_COMMENT,
+  async ({ id, comment, rating }, { extra }) => {
+    const { api } = extra;
+    const { data } = await api.post<Review[]>(`${ApiRoute.Comments}/${id}`, { comment, rating });
 
     return data;
   });

@@ -1,5 +1,5 @@
 import store from '../store';
-import {Film, Comment, User, Genre, GenreName} from './types';
+import {Film, Review, User, GenreName} from './types';
 import {AuthorizationStatus} from '../const';
 
 export type SiteData = {
@@ -11,7 +11,7 @@ export type SiteData = {
   isFilmLoading: boolean;
   favoriteFilms: Film[];
   isFavoriteFilmsLoading: boolean;
-  comments: Comment[];
+  comments: Review[];
 };
 
 export type SiteProcess = {

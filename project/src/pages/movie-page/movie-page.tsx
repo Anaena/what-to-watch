@@ -1,8 +1,8 @@
 import {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {fetchFilm} from '../../store/action';
-import {getFilm, getIsFilmLoading} from '../../store/site-data/selectors';
+import {fetchComments, fetchFilm} from '../../store/action';
+import {getComments, getFilm, getIsFilmLoading} from '../../store/site-data/selectors';
 import Spinner from '../../components/spinner/spinner';
 import Header from '../../components/header/header';
 import Logo from '../../components/logo/logo';
@@ -10,6 +10,7 @@ import Overview from '../../components/overview/overview';
 import {TabsName} from '../../const';
 import Details from '../../components/details/details';
 import FilmTab from '../../components/film-tab/film-tab';
+import Reviews from '../../components/reviews/reviews';
 // import {getAuthorizationStatus} from '../../store/user-process/selectors';
 
 function MoviePage(): JSX.Element {
@@ -18,7 +19,7 @@ function MoviePage(): JSX.Element {
   // const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const film = useAppSelector(getFilm);
   const isFilmLoading = useAppSelector(getIsFilmLoading);
-  // const comments = useAppSelector(getComments);
+  const comments = useAppSelector(getComments);
   const [activeTab, setActiveTab] = useState(TabsName.OVERVIEW);
 
   useEffect(() => {
@@ -26,7 +27,7 @@ function MoviePage(): JSX.Element {
     if (id) {
       const parsedId = Number(id);
       dispatch(fetchFilm(parsedId));
-      // dispatch(fetchComments(parsedId));
+      dispatch(fetchComments(parsedId));
     }
   }, [params, dispatch]);
 
@@ -99,6 +100,9 @@ function MoviePage(): JSX.Element {
               )}
               {activeTab === TabsName.DETAILS && (
                 <Details runTime={runTime} genre={genre} released={released} director={director} starring={starring} />
+              )}
+              {activeTab === TabsName.REVIEWS && (
+                <Reviews reviews={comments}/>
               )}
             </div>
           </div>
