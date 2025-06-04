@@ -1,4 +1,4 @@
-import {genreMap, genres} from '../const';
+import {genreMap, genres, TabsName} from '../const';
 
 export type Token = string;
 
@@ -46,3 +46,4 @@ export type Genre = typeof genres[number];
 export type GenreName = keyof typeof genreMap;
 export type ReviewAuth = Pick<Review, 'comment' | 'rating'> & Pick<Film, 'id'>;
 export type FavoriteAuth = Pick<Film, 'id'> & { status: 1 | 0 }
+export type TabName = keyof typeof TabsName;

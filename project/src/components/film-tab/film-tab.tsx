@@ -1,19 +1,20 @@
 import {memo} from 'react';
+import {TabName} from '../../types/types';
 
 type FilmTab = {
   tabName: string;
   isActive: boolean;
-  onClick: (value: string) => void;
+  onClick: (tab:TabName) => void;
 }
 
 const FilmTab = ({tabName, isActive, onClick}: FilmTab): JSX.Element => {
-  const handleCityClick = () => {
+  const handleTabClick = () => {
     onClick(tabName);
   };
 
   return (
     <li className={`film-nav__item${isActive ? ' film-nav__item--active' : ''}`}>
-      <a className="film-nav__link" onClick={handleCityClick} style={{cursor: 'pointer'}}>{tabName}</a>
+      <a className="film-nav__link" onClick={handleTabClick} style={{cursor: 'pointer'}}>{tabName}</a>
     </li>
   );
 };

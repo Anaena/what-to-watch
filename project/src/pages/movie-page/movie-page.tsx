@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {fetchComments, fetchFilm} from '../../store/action';
@@ -11,9 +11,10 @@ import {TabsName} from '../../const';
 import Details from '../../components/details/details';
 import FilmTab from '../../components/film-tab/film-tab';
 import Reviews from '../../components/reviews/reviews';
+import {TabName} from '../../types/types';
 // import {getAuthorizationStatus} from '../../store/user-process/selectors';
 
-function MoviePage(): JSX.Element {
+function MoviePage(): JSX.Element | null {
   const params = useParams();
   const dispatch = useAppDispatch();
   // const authorizationStatus = useAppSelector(getAuthorizationStatus);
@@ -31,12 +32,16 @@ function MoviePage(): JSX.Element {
     }
   }, [params, dispatch]);
 
+  const handleTabClick = useCallback((tab:TabName) => {
+    setActiveTab(tab);
+  }, []);
+
   if (isFilmLoading) {
     return <Spinner />;
   }
 
   if (!film) {
-    return;
+    return null;
   }
 
   const { id, name, posterImage, previewImage, backgroundImage, backgroundColor, videoLink, previewVideoLink, description, rating, scoresCount, director, starring, runTime, genre, released, isFavorite } = film;
@@ -90,7 +95,7 @@ function MoviePage(): JSX.Element {
               <nav className="film-nav film-card__nav">
                 <ul className="film-nav__list">
                   {Object.values(TabsName).map((tabName) => (
-                    <FilmTab tabName={tabName} key={tabName} isActive={tabName === activeTab} onClick={() => setActiveTab(tabName)}/>
+                    <FilmTab tabName={tabName} key={tabName} isActive={tabName === activeTab} onClick={handleTabClick}/>
                   ))}
                 </ul>
               </nav>
