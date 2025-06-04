@@ -3,6 +3,7 @@ import {AppRoute, AuthorizationStatus} from '../../const';
 import {useAppSelector} from '../../hooks';
 import {getAuthorizationStatus, getUser} from '../../store/user-process/selectors';
 import Logo from '../logo/logo';
+import {memo} from 'react';
 
 type HeaderProps = {
   page?: 'main' | 'other';
@@ -39,4 +40,4 @@ const Header = ({page, title}: HeaderProps) => {
   );
 };
 
-export default Header;
+export default memo(Header);
