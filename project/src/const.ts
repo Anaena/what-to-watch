@@ -1,11 +1,13 @@
 export const FILMS_COUNT = 8;
 export const MAX_GENRES_COUNT = 9;
+export const STARS_COUNT = 10;
 
 export enum AppRoute {
   Root = '/',
   Login = '/login',
   Film = '/films',
   Favorites = '/mylist',
+  AddReview = '/review',
   Player = '/player',
   NotFound = '/404'
 }

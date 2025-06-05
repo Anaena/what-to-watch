@@ -1,10 +1,11 @@
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
-import MainPage from '../../pages/main/main';
 import {AppRoute} from '../../const';
-import LoginPage from '../../pages/login/login';
 import PrivateRoute from '../private-route/private-route';
+import MainPage from '../../pages/main/main';
+import LoginPage from '../../pages/login/login';
 import MyList from '../../pages/my-list/my-list';
 import MoviePage from '../../pages/movie-page/movie-page';
+import AddReviewPage from '../../pages/add-review/add-review';
 
 function App(): JSX.Element {
   return (
@@ -17,6 +18,14 @@ function App(): JSX.Element {
           element={
             <PrivateRoute>
               <MyList />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={`${AppRoute.Film}/:id${AppRoute.AddReview}`}
+          element={
+            <PrivateRoute>
+              <AddReviewPage />
             </PrivateRoute>
           }
         />

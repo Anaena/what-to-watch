@@ -1,26 +1,39 @@
+import {memo, ReactNode} from 'react';
 import { Link } from 'react-router-dom';
 import {AppRoute, AuthorizationStatus} from '../../const';
 import {useAppSelector} from '../../hooks';
 import {getAuthorizationStatus, getUser} from '../../store/user-process/selectors';
 import Logo from '../logo/logo';
-import {memo} from 'react';
 
 type HeaderProps = {
-  page?: 'main' | 'other';
-  title?: string;
+  page?: 'main' | 'my-list' | 'add-review' | 'other';
+  children?: ReactNode;
 }
 
-const Header = ({page, title}: HeaderProps) => {
+const Header = ({page, children}: HeaderProps) => {
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const user = useAppSelector(getUser);
 
+  let headerClass;
+  switch (page) {
+    case 'my-list':
+      headerClass = 'page-header user-page__head';
+      break;
+    case 'add-review':
+      headerClass = 'page-header';
+      break;
+    case 'main':
+    case 'other':
+    default:
+      headerClass = 'page-header film-card__head';
+      break;
+  }
+
   return (
-    <header className={`page-header ${title ? 'user-page__head' : 'film-card__head'}`}>
+    <header className={headerClass}>
       <Logo page={page} />
 
-      {title && (
-        <h1 className="page-title user-page__title">{title}</h1>
-      )}
+      {children}
 
       <ul className="user-block">
         {authorizationStatus === AuthorizationStatus.Auth && (

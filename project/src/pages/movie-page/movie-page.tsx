@@ -1,28 +1,28 @@
 import {useCallback, useEffect, useState} from 'react';
-import {useParams} from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 import {useAppDispatch, useAppSelector} from '../../hooks';
+import {AppRoute, AuthorizationStatus, TabsName} from '../../const';
+import {TabName} from '../../types/types';
 import {fetchComments, fetchFilm, fetchSimilarFilms} from '../../store/action';
-import {getComments, getFilm, getIsFilmLoading, getSimilarFilms} from '../../store/site-data/selectors';
+import { getComments, getFilm, getIsFilmLoading } from '../../store/site-data/selectors';
+import {getAuthorizationStatus} from '../../store/user-process/selectors';
 import Spinner from '../../components/spinner/spinner';
 import Header from '../../components/header/header';
 import Logo from '../../components/logo/logo';
 import Overview from '../../components/overview/overview';
-import {TabsName} from '../../const';
 import Details from '../../components/details/details';
 import FilmTab from '../../components/film-tab/film-tab';
 import Reviews from '../../components/reviews/reviews';
-import {TabName} from '../../types/types';
-import SimilarFilms from "../../components/similar-list/similar-list";
-// import {getAuthorizationStatus} from '../../store/user-process/selectors';
+import SimilarFilms from '../../components/similar-list/similar-list';
 
 function MoviePage(): JSX.Element | null {
   const params = useParams();
   const dispatch = useAppDispatch();
-  // const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const film = useAppSelector(getFilm);
   const isFilmLoading = useAppSelector(getIsFilmLoading);
   const comments = useAppSelector(getComments);
-  // const similarFilms = useAppSelector(getSimilarFilms);
+
   const [activeTab, setActiveTab] = useState('Overview');
 
   useEffect(() => {
@@ -82,7 +82,9 @@ function MoviePage(): JSX.Element | null {
                   </svg>
                   <span>My list</span>
                 </button>
-                <a href="add-review.html" className="btn film-card__button">Add review</a>
+                {authorizationStatus === AuthorizationStatus.Auth && (
+                  <Link to={`${AppRoute.Film}/${id}${AppRoute.AddReview}`} className="btn film-card__button">Add review</Link>
+                )}
               </div>
             </div>
           </div>
