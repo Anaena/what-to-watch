@@ -1,22 +1,18 @@
 import type {ChangeEvent, FormEvent} from 'react';
 import { Fragment, useState } from 'react';
-import {useNavigate} from 'react-router-dom';
 
 import { STARS_COUNT } from '../../const';
 import {ReviewAuth} from '../../types/types';
 
 type FormProps = {
   onSubmit: (formData: Omit<ReviewAuth, 'id'>) => void;
-  filmId: number;
+  error: string | null;
 };
 
-const Form = ({ onSubmit, filmId }: FormProps) => {
+const Form = ({ onSubmit, error }: FormProps) => {
   const [text, setText] = useState<string>('');
   const [rating, setRating] = useState<number>(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const navigate = useNavigate();
 
   const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.target.value);
@@ -28,20 +24,18 @@ const Form = ({ onSubmit, filmId }: FormProps) => {
 
   const isValid = rating > 0 && text.length >= 50 && text.length <= 400;
 
-  const handleFormSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
+  const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!isValid) return;
 
-    setIsSubmitting(true);
-    setError(null);
-
-    try {
-      await onSubmit({ comment: text, rating });
-      navigate(`/films/${filmId}`);
-    } catch (err) {
-      setError('Failed to submit review. Please try again.');
+    onSubmit({
+      comment: text,
+      rating
+    });
+    if (error) {
       setIsSubmitting(false);
     }
+    setIsSubmitting(true);
   };
 
   return (

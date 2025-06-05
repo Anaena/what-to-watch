@@ -1,5 +1,5 @@
-import {useEffect } from 'react';
-import {Link, useParams} from 'react-router-dom';
+import {useEffect, useState} from 'react';
+import {Link, useNavigate, useParams} from 'react-router-dom';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {AppRoute } from '../../const';
 import {ReviewAuth} from '../../types/types';
@@ -11,9 +11,11 @@ import Form from '../../components/form/form';
 
 function AddReviewPage(): JSX.Element {
   const params = useParams();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const film = useAppSelector(getFilm);
   const isFilmLoading = useAppSelector(getIsFilmLoading);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const { id } = params;
@@ -29,8 +31,14 @@ function AddReviewPage(): JSX.Element {
 
   const { name, backgroundImage, posterImage, id} = film;
 
-  const onFormSubmit = (formData: Omit<ReviewAuth, 'id'>) => {
-    dispatch(postComment({ id, ...formData }));
+  const onFormSubmit = async (formData: Omit<ReviewAuth, 'id'>) => {
+    setError(null);
+    try {
+      await dispatch(postComment({ id, ...formData }));
+      navigate(`/films/${id}`);
+    } catch (err) {
+      setError('Failed to submit review. Please try again.');
+    }
   };
 
   return (
@@ -61,7 +69,7 @@ function AddReviewPage(): JSX.Element {
       </div>
 
       <div className="add-review">
-        <Form onSubmit={onFormSubmit} filmId={id} />
+        <Form onSubmit={onFormSubmit} error={error}/>
       </div>
 
     </section>
