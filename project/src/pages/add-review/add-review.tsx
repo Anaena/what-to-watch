@@ -61,7 +61,7 @@ function AddReviewPage(): JSX.Element {
       </div>
 
       <div className="add-review">
-        <Form onSubmit={onFormSubmit} />
+        <Form onSubmit={onFormSubmit} filmId={id} />
       </div>
 
     </section>

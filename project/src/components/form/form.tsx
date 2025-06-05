@@ -1,16 +1,22 @@
 import type {ChangeEvent, FormEvent} from 'react';
 import { Fragment, useState } from 'react';
+import {useNavigate} from 'react-router-dom';
 
 import { STARS_COUNT } from '../../const';
 import {ReviewAuth} from '../../types/types';
 
 type FormProps = {
   onSubmit: (formData: Omit<ReviewAuth, 'id'>) => void;
-}
+  filmId: number;
+};
 
-const Form = ({ onSubmit }: FormProps) => {
+const Form = ({ onSubmit, filmId }: FormProps) => {
   const [text, setText] = useState<string>('');
   const [rating, setRating] = useState<number>(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const navigate = useNavigate();
 
   const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.target.value);
@@ -20,13 +26,22 @@ const Form = ({ onSubmit }: FormProps) => {
     setRating(Number(e.target.value));
   };
 
-  const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const isValid = rating > 0 && text.length >= 50 && text.length <= 400;
 
-    onSubmit({
-      comment: text,
-      rating
-    });
+  const handleFormSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
+    e.preventDefault();
+    if (!isValid) return;
+
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      await onSubmit({ comment: text, rating });
+      navigate(`/films/${filmId}`);
+    } catch (err) {
+      setError('Failed to submit review. Please try again.');
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -62,10 +77,12 @@ const Form = ({ onSubmit }: FormProps) => {
           placeholder="Review text"
           value={text}
           onChange={handleTextareaChange}
+          disabled={isSubmitting}
         >
         </textarea>
+        {error && <div className="form-error">{error}</div>}
         <div className="add-review__submit">
-          <button className="add-review__btn" type="submit">Post</button>
+          <button className="add-review__btn" type="submit" disabled={!isValid || isSubmitting}>Post</button>
         </div>
       </div>
     </form>
