@@ -9,6 +9,7 @@ export type SiteData = {
   isPromoFilmLoading: boolean;
   film: Film | null;
   isFilmLoading: boolean;
+  similarFilms: Film[];
   favoriteFilms: Film[];
   isFavoriteFilmsLoading: boolean;
   comments: Review[];

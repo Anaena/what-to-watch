@@ -1,7 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { SiteData } from '../../types/state';
 import { StoreSlice } from '../../const';
-import {fetchComments, fetchFavoriteFilms, fetchFilm, fetchFilms, fetchPromoFilm, postComment} from '../action';
+import {
+  fetchComments,
+  fetchFavoriteFilms,
+  fetchFilm,
+  fetchFilms,
+  fetchPromoFilm,
+  fetchSimilarFilms,
+  postComment
+} from '../action';
 
 const initialState: SiteData = {
   films: [],
@@ -10,6 +18,7 @@ const initialState: SiteData = {
   isPromoFilmLoading: false,
   film: null,
   isFilmLoading: false,
+  similarFilms: [],
   favoriteFilms: [],
   isFavoriteFilmsLoading: false,
   comments: [],
@@ -57,6 +66,9 @@ export const siteData = createSlice({
       })
       .addCase(fetchFavoriteFilms.rejected, (state) => {
         state.isFavoriteFilmsLoading = false;
+      })
+      .addCase(fetchSimilarFilms.fulfilled, (state, action) => {
+        state.similarFilms = action.payload;
       })
       .addCase(fetchComments.fulfilled, (state, action) => {
         state.comments = action.payload;

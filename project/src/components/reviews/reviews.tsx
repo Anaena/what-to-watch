@@ -6,8 +6,9 @@ type ReviewsProps = {
 };
 
 const Reviews = ({reviews}: ReviewsProps): JSX.Element => {
-  const firstCol = reviews.slice(0, reviews.length / 2);
-  const secondCol = reviews.slice(reviews.length / 2);
+  const middle = Math.ceil(reviews.length / 2);
+  const firstCol = reviews.slice(0, middle);
+  const secondCol = reviews.slice(middle);
 
   return (
     <div className="film-card__reviews film-card__row">

@@ -13,6 +13,8 @@ export const getFilm = ({ [StoreSlice.SiteData]: SITE_DATA }: State): Film | nul
 export const getIsPromoFilmLoading = ({ [StoreSlice.SiteData]: SITE_DATA }: State): boolean => SITE_DATA.isPromoFilmLoading;
 export const getPromoFilm = ({ [StoreSlice.SiteData]: SITE_DATA }: State): Film | null => SITE_DATA.promoFilm;
 
+export const getSimilarFilms = ({ [StoreSlice.SiteData]: SITE_DATA}: State): Film[] => SITE_DATA.similarFilms;
+
 export const selectFilms = createSelector(
   [getFilms, getGenre],
   (films, genre) => films.filter((film) => genre === 'All genres' ? films : film.genre === genre));

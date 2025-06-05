@@ -16,6 +16,7 @@ export const Action = {
   FETCH_FILM: 'film/fetch',
   FETCH_PROMO: 'promo/fetch',
   SET_GENRE: 'genre/set',
+  FETCH_SIMILAR_FILMS: 'films/fetch-similar',
   FETCH_FAVORITE_FILMS: 'films/fetch-favorite',
   POST_FAVORITE: 'films/post-favorite',
   FETCH_COMMENTS: 'film/fetch-comments',
@@ -119,6 +120,15 @@ export const postComment = createAsyncThunk<Review[], ReviewAuth, { extra: Extra
   async ({ id, comment, rating }, { extra }) => {
     const { api } = extra;
     const { data } = await api.post<Review[]>(`${ApiRoute.Comments}/${id}`, { comment, rating });
+
+    return data;
+  });
+
+export const fetchSimilarFilms = createAsyncThunk<Film[], Film['id'], { extra: Extra }>(
+  Action.FETCH_SIMILAR_FILMS,
+  async (id, { extra }) => {
+    const { api } = extra;
+    const { data } = await api.get<Film[]>(`${ApiRoute.Films}/${id}/similar`);
 
     return data;
   });
