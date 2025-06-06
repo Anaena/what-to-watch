@@ -26,8 +26,6 @@ const Form = ({ onSubmit, error }: FormProps) => {
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!isValid) return;
-
     onSubmit({
       comment: text,
       rating

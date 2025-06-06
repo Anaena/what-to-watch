@@ -3,7 +3,7 @@ import {Link, useParams} from 'react-router-dom';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {AppRoute, AuthorizationStatus, TabsName} from '../../const';
 import {TabName} from '../../types/types';
-import {fetchComments, fetchFilm, fetchSimilarFilms} from '../../store/action';
+import {fetchComments, fetchFilm, fetchSimilarFilms, postFavorite} from '../../store/action';
 import { getComments, getFilm, getIsFilmLoading } from '../../store/site-data/selectors';
 import {getAuthorizationStatus} from '../../store/user-process/selectors';
 import Spinner from '../../components/spinner/spinner';
@@ -34,6 +34,13 @@ function MoviePage(): JSX.Element | null {
       dispatch(fetchComments(parsedId));
     }
   }, [params, dispatch]);
+
+  const handleFavoriteButtonClick = () => {
+    dispatch(postFavorite({
+      id,
+      status: isFavorite ? 0 : 1
+    }));
+  };
 
   const handleTabClick = useCallback((tab:TabName):void => {
     setActiveTab(tab);
@@ -76,10 +83,10 @@ function MoviePage(): JSX.Element | null {
                   </svg>
                   <span>Play</span>
                 </button>
-                <button className="btn btn--list film-card__button" type="button">
-                  <svg viewBox="0 0 19 20" width="19" height="20">
-                    <use xlinkHref="#add"></use>
-                  </svg>
+                <button className="btn btn--list film-card__button" type="button" onClick={handleFavoriteButtonClick}>
+                  {isFavorite ?
+                    (<svg viewBox="0 0 18 14" width="18" height="14"><use xlinkHref="#in-list"></use></svg>) :
+                    (<svg viewBox="0 0 19 20" width="19" height="20"><use xlinkHref="#add"></use></svg>)}
                   <span>My list</span>
                 </button>
                 {authorizationStatus === AuthorizationStatus.Auth && (

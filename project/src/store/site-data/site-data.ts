@@ -8,7 +8,7 @@ import {
   fetchFilms,
   fetchPromoFilm,
   fetchSimilarFilms,
-  postComment
+  postComment, postFavorite
 } from '../action';
 
 const initialState: SiteData = {
@@ -66,6 +66,24 @@ export const siteData = createSlice({
       })
       .addCase(fetchFavoriteFilms.rejected, (state) => {
         state.isFavoriteFilmsLoading = false;
+      })
+      .addCase(postFavorite.fulfilled, (state, action) => {
+        const updatedFilm = action.payload;
+        state.films = state.films.map((film) => film.id === updatedFilm.id ? updatedFilm : film);
+
+        if (state.promoFilm && state.promoFilm.id === updatedFilm.id) {
+          state.promoFilm = updatedFilm;
+        }
+
+        if (state.film && state.film.id === updatedFilm.id) {
+          state.film = updatedFilm;
+        }
+
+        if (updatedFilm.isFavorite) {
+          state.favoriteFilms = state.favoriteFilms.concat(updatedFilm);
+        } else {
+          state.favoriteFilms = state.favoriteFilms.filter((favoriteFilm) => favoriteFilm.id !== updatedFilm.id);
+        }
       })
       .addCase(fetchSimilarFilms.fulfilled, (state, action) => {
         state.similarFilms = action.payload;

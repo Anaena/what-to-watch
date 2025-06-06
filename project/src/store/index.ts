@@ -3,7 +3,7 @@ import history from '../history';
 
 import {createAPI} from '../services/api';
 import { rootReducer } from './reducer';
-import {fetchFilms, fetchPromoFilm, fetchUserStatus} from './action';
+import {fetchFilms, fetchUserStatus} from './action';
 
 const api = createAPI();
 const store = configureStore({
@@ -20,6 +20,5 @@ const store = configureStore({
 
 store.dispatch(fetchUserStatus());
 store.dispatch(fetchFilms());
-store.dispatch(fetchPromoFilm());
 
 export default store;

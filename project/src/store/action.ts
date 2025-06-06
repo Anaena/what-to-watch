@@ -4,7 +4,7 @@ import type { History } from 'history';
 
 import {ApiRoute, AppRoute, HttpCode} from '../const';
 import {dropToken, saveToken} from '../services/token';
-import {ReviewAuth, Film, Genre, Review, User, UserAuth} from '../types/types';
+import {ReviewAuth, Film, Genre, Review, User, UserAuth, FavoriteAuth} from '../types/types';
 
 type Extra = {
   api: AxiosInstance;
@@ -104,6 +104,26 @@ export const fetchFavoriteFilms = createAsyncThunk<Film[], undefined, { extra: E
     const { data } = await api.get<Film[]>(ApiRoute.Favorite);
 
     return data;
+  });
+
+export const postFavorite = createAsyncThunk<Film, FavoriteAuth, { extra: Extra }>(
+  Action.POST_FAVORITE,
+  async ({ id, status }, { extra }) => {
+    const { api, history } = extra;
+
+    try {
+      const { data } = await api.post<Film>(`${ApiRoute.Favorite}/${id}/${status}`);
+
+      return data;
+    } catch (error) {
+      const axiosError = error as AxiosError;
+
+      if (axiosError.response?.status === HttpCode.NoAuth) {
+        history.push(AppRoute.Login);
+      }
+
+      return Promise.reject(error);
+    }
   });
 
 export const fetchComments = createAsyncThunk<Review[], Film['id'], { extra: Extra }>(
