@@ -26,7 +26,7 @@ const Catalog = (): JSX.Element => {
         </div>
       )}
     </section>
-  )
+  );
 };
 
 export default Catalog;

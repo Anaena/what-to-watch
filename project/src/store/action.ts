@@ -4,7 +4,7 @@ import type { History } from 'history';
 
 import {ApiRoute, AppRoute, HttpCode} from '../const';
 import {dropToken, saveToken} from '../services/token';
-import {Film, Genre, User, UserAuth} from '../types/types';
+import {ReviewAuth, Film, Genre, Review, User, UserAuth, FavoriteAuth} from '../types/types';
 
 type Extra = {
   api: AxiosInstance;
@@ -16,10 +16,11 @@ export const Action = {
   FETCH_FILM: 'film/fetch',
   FETCH_PROMO: 'promo/fetch',
   SET_GENRE: 'genre/set',
+  FETCH_SIMILAR_FILMS: 'films/fetch-similar',
   FETCH_FAVORITE_FILMS: 'films/fetch-favorite',
   POST_FAVORITE: 'films/post-favorite',
-  // FETCH_COMMENTS: 'offer/fetch-comments',
-  // POST_COMMENT: 'offer/post-comment',
+  FETCH_COMMENTS: 'film/fetch-comments',
+  POST_COMMENT: 'film/post-comment',
   LOGIN_USER: 'user/login',
   FETCH_USER_STATUS: 'user/fetch-status',
   LOGOUT_USER: 'user/logout',
@@ -101,6 +102,53 @@ export const fetchFavoriteFilms = createAsyncThunk<Film[], undefined, { extra: E
   async (_, { extra }) => {
     const { api } = extra;
     const { data } = await api.get<Film[]>(ApiRoute.Favorite);
+
+    return data;
+  });
+
+export const postFavorite = createAsyncThunk<Film, FavoriteAuth, { extra: Extra }>(
+  Action.POST_FAVORITE,
+  async ({ id, status }, { extra }) => {
+    const { api, history } = extra;
+
+    try {
+      const { data } = await api.post<Film>(`${ApiRoute.Favorite}/${id}/${status}`);
+
+      return data;
+    } catch (error) {
+      const axiosError = error as AxiosError;
+
+      if (axiosError.response?.status === HttpCode.NoAuth) {
+        history.push(AppRoute.Login);
+      }
+
+      return Promise.reject(error);
+    }
+  });
+
+export const fetchComments = createAsyncThunk<Review[], Film['id'], { extra: Extra }>(
+  Action.FETCH_COMMENTS,
+  async (id, { extra }) => {
+    const { api } = extra;
+    const { data } = await api.get<Review[]>(`${ApiRoute.Comments}/${id}`);
+
+    return data;
+  });
+
+export const postComment = createAsyncThunk<Review[], ReviewAuth, { extra: Extra }>(
+  Action.POST_COMMENT,
+  async ({ id, comment, rating }, { extra }) => {
+    const { api } = extra;
+    const { data } = await api.post<Review[]>(`${ApiRoute.Comments}/${id}`, { comment, rating });
+
+    return data;
+  });
+
+export const fetchSimilarFilms = createAsyncThunk<Film[], Film['id'], { extra: Extra }>(
+  Action.FETCH_SIMILAR_FILMS,
+  async (id, { extra }) => {
+    const { api } = extra;
+    const { data } = await api.get<Film[]>(`${ApiRoute.Films}/${id}/similar`);
 
     return data;
   });

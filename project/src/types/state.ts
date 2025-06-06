@@ -1,5 +1,5 @@
 import store from '../store';
-import {Film, Comment, User, Genre, GenreName} from './types';
+import {Film, Review, User, GenreName} from './types';
 import {AuthorizationStatus} from '../const';
 
 export type SiteData = {
@@ -9,9 +9,10 @@ export type SiteData = {
   isPromoFilmLoading: boolean;
   film: Film | null;
   isFilmLoading: boolean;
+  similarFilms: Film[];
   favoriteFilms: Film[];
   isFavoriteFilmsLoading: boolean;
-  comments: Comment[];
+  comments: Review[];
 };
 
 export type SiteProcess = {

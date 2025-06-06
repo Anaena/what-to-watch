@@ -1,29 +1,50 @@
-import {useEffect} from "react";
-import {useParams} from 'react-router-dom';
+import {useCallback, useEffect, useState} from 'react';
+import {Link, useParams} from 'react-router-dom';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {fetchFilm} from '../../store/action';
-import {getFilm, getIsFilmLoading} from '../../store/site-data/selectors';
+import {AppRoute, AuthorizationStatus, TabsName} from '../../const';
+import {TabName} from '../../types/types';
+import {fetchComments, fetchFilm, fetchSimilarFilms, postFavorite} from '../../store/action';
+import { getComments, getFilm, getIsFilmLoading } from '../../store/site-data/selectors';
+import {getAuthorizationStatus} from '../../store/user-process/selectors';
 import Spinner from '../../components/spinner/spinner';
 import Header from '../../components/header/header';
-import Logo from "../../components/logo/logo";
-// import {getAuthorizationStatus} from '"'../../store/user-process/selectors";
+import Logo from '../../components/logo/logo';
+import Overview from '../../components/overview/overview';
+import Details from '../../components/details/details';
+import FilmTab from '../../components/film-tab/film-tab';
+import Reviews from '../../components/reviews/reviews';
+import SimilarFilms from '../../components/similar-list/similar-list';
 
-function MoviePage(): JSX.Element {
+function MoviePage(): JSX.Element | null {
   const params = useParams();
   const dispatch = useAppDispatch();
-  // const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const film = useAppSelector(getFilm);
   const isFilmLoading = useAppSelector(getIsFilmLoading);
-  // const comments = useAppSelector(getComments);
+  const comments = useAppSelector(getComments);
+
+  const [activeTab, setActiveTab] = useState('Overview');
 
   useEffect(() => {
     const { id } = params;
     if (id) {
       const parsedId = Number(id);
       dispatch(fetchFilm(parsedId));
-      // dispatch(fetchComments(parsedId));
+      dispatch(fetchSimilarFilms(parsedId));
+      dispatch(fetchComments(parsedId));
     }
   }, [params, dispatch]);
+
+  const handleFavoriteButtonClick = () => {
+    dispatch(postFavorite({
+      id,
+      status: isFavorite ? 0 : 1
+    }));
+  };
+
+  const handleTabClick = useCallback((tab:TabName):void => {
+    setActiveTab(tab);
+  }, []);
 
   if (isFilmLoading) {
     return <Spinner />;
@@ -62,13 +83,15 @@ function MoviePage(): JSX.Element {
                   </svg>
                   <span>Play</span>
                 </button>
-                <button className="btn btn--list film-card__button" type="button">
-                  <svg viewBox="0 0 19 20" width="19" height="20">
-                    <use xlinkHref="#add"></use>
-                  </svg>
+                <button className="btn btn--list film-card__button" type="button" onClick={handleFavoriteButtonClick}>
+                  {isFavorite ?
+                    (<svg viewBox="0 0 18 14" width="18" height="14"><use xlinkHref="#in-list"></use></svg>) :
+                    (<svg viewBox="0 0 19 20" width="19" height="20"><use xlinkHref="#add"></use></svg>)}
                   <span>My list</span>
                 </button>
-                <a href="add-review.html" className="btn film-card__button">Add review</a>
+                {authorizationStatus === AuthorizationStatus.Auth && (
+                  <Link to={`${AppRoute.Film}/${id}${AppRoute.AddReview}`} className="btn film-card__button">Add review</Link>
+                )}
               </div>
             </div>
           </div>
@@ -77,40 +100,27 @@ function MoviePage(): JSX.Element {
         <div className="film-card__wrap film-card__translate-top">
           <div className="film-card__info">
             <div className="film-card__poster film-card__poster--big">
-              <img src={posterImage} alt={name} width="218"
-                   height="327"/>
+              <img src={posterImage} alt={name} width="218" height="327"/>
             </div>
 
             <div className="film-card__desc">
               <nav className="film-nav film-card__nav">
                 <ul className="film-nav__list">
-                  <li className="film-nav__item film-nav__item--active">
-                    <a href="#" className="film-nav__link">Overview</a>
-                  </li>
-                  <li className="film-nav__item">
-                    <a href="#" className="film-nav__link">Details</a>
-                  </li>
-                  <li className="film-nav__item">
-                    <a href="#" className="film-nav__link">Reviews</a>
-                  </li>
+                  {Object.values(TabsName).map((tabName) => (
+                    <FilmTab tabName={tabName} key={tabName} isActive={tabName === activeTab} onClick={handleTabClick}/>
+                  ))}
                 </ul>
               </nav>
 
-              <div className="film-rating">
-                <div className="film-rating__score">{rating}</div>
-                <p className="film-rating__meta">
-                  <span className="film-rating__level">Very good</span>
-                  <span className="film-rating__count">{scoresCount}</span>
-                </p>
-              </div>
-
-              <div className="film-card__text">
-                <p>{description}</p>
-
-                <p className="film-card__director"><strong>{`Director: ${director}`}</strong></p>
-
-                <p className="film-card__starring"><strong>{`Starring: ${starring}`}</strong></p>
-              </div>
+              {activeTab === TabsName.Overview && (
+                <Overview rating={rating} scoresCount={scoresCount} description={description} director={director} starring={starring} />
+              )}
+              {activeTab === TabsName.Details && (
+                <Details runTime={runTime} genre={genre} released={released} director={director} starring={starring} />
+              )}
+              {activeTab === TabsName.Reviews && (
+                <Reviews reviews={comments}/>
+              )}
             </div>
           </div>
         </div>
@@ -120,45 +130,7 @@ function MoviePage(): JSX.Element {
         <section className="catalog catalog--like-this">
           <h2 className="catalog__title">More like this</h2>
 
-          <div className="catalog__films-list">
-            <article className="small-film-card catalog__films-card">
-              <div className="small-film-card__image">
-                <img src="img/fantastic-beasts-the-crimes-of-grindelwald.jpg"
-                     alt="Fantastic Beasts: The Crimes of Grindelwald" width="280" height="175"/>
-              </div>
-              <h3 className="small-film-card__title">
-                <a className="small-film-card__link" href="film-page.html">Fantastic Beasts: The Crimes of
-                  Grindelwald</a>
-              </h3>
-            </article>
-
-            <article className="small-film-card catalog__films-card">
-              <div className="small-film-card__image">
-                <img src="img/bohemian-rhapsody.jpg" alt="Bohemian Rhapsody" width="280" height="175"/>
-              </div>
-              <h3 className="small-film-card__title">
-                <a className="small-film-card__link" href="film-page.html">Bohemian Rhapsody</a>
-              </h3>
-            </article>
-
-            <article className="small-film-card catalog__films-card">
-              <div className="small-film-card__image">
-                <img src="img/macbeth.jpg" alt="Macbeth" width="280" height="175"/>
-              </div>
-              <h3 className="small-film-card__title">
-                <a className="small-film-card__link" href="film-page.html">Macbeth</a>
-              </h3>
-            </article>
-
-            <article className="small-film-card catalog__films-card">
-              <div className="small-film-card__image">
-                <img src="img/aviator.jpg" alt="Aviator" width="280" height="175"/>
-              </div>
-              <h3 className="small-film-card__title">
-                <a className="small-film-card__link" href="film-page.html">Aviator</a>
-              </h3>
-            </article>
-          </div>
+          <SimilarFilms />
         </section>
 
         <footer className="page-footer">
@@ -172,7 +144,7 @@ function MoviePage(): JSX.Element {
         </footer>
       </div>
     </>
-  )
-};
+  );
+}
 
 export default MoviePage;

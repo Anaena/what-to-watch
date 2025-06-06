@@ -8,12 +8,12 @@ type GenresItem = {
 }
 
 const GenresItem = ({name, isActive, onClick}: GenresItem): JSX.Element => {
-  const handleCityClick = () => {
+  const handleGenreClick = () => {
     onClick(name);
   };
 
   return (
-    <li className={`catalog__genres-item${isActive ? ' catalog__genres-item--active' : ''}`} onClick={handleCityClick}>
+    <li className={`catalog__genres-item${isActive ? ' catalog__genres-item--active' : ''}`} onClick={handleGenreClick}>
       <a href="#" className="catalog__genres-link">{name}</a>
     </li>
   );
