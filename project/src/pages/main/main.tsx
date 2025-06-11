@@ -1,4 +1,5 @@
 import {useEffect} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import { fetchPromoFilm, postFavorite } from '../../store/action';
 import {getIsPromoFilmLoading, getPromoFilm} from '../../store/site-data/selectors';
@@ -11,6 +12,7 @@ function MainPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const promoFilm = useAppSelector(getPromoFilm);
   const isPromoFilmLoading = useAppSelector(getIsPromoFilmLoading);
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(fetchPromoFilm());
@@ -54,7 +56,7 @@ function MainPage(): JSX.Element {
               </p>
 
               <div className="film-card__buttons">
-                <button className="btn btn--play film-card__button" type="button">
+                <button className="btn btn--play film-card__button" type="button" onClick={() => navigate('/player')}>
                   <svg viewBox="0 0 19 19" width="19" height="19">
                     <use xlinkHref="#play-s"></use>
                   </svg>

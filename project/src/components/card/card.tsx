@@ -4,21 +4,7 @@ import {AppRoute} from '../../const';
 const Card = ({
   id,
   name,
-  posterImage,
-  previewImage,
-  backgroundImage,
-  backgroundColor,
-  videoLink,
-  previewVideoLink,
-  description,
-  rating,
-  scoresCount,
-  director,
-  starring,
-  runTime,
-  genre,
-  released,
-  isFavorite,
+  posterImage
 }: Film): JSX.Element => (
   <article className="small-film-card catalog__films-card">
     <div className="small-film-card__image">

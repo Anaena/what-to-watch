@@ -6,6 +6,7 @@ import LoginPage from '../../pages/login/login';
 import MyList from '../../pages/my-list/my-list';
 import MoviePage from '../../pages/movie-page/movie-page';
 import AddReviewPage from '../../pages/add-review/add-review';
+import PlayerPage from '../../pages/player/player';
 
 function App(): JSX.Element {
   return (
@@ -28,6 +29,10 @@ function App(): JSX.Element {
               <AddReviewPage />
             </PrivateRoute>
           }
+        />
+        <Route
+          path={AppRoute.Player}
+          element={<PlayerPage />}
         />
         <Route path={AppRoute.Login} element={<LoginPage />} />
       </Routes>

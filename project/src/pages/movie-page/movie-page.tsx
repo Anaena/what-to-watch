@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useState} from 'react';
-import {Link, useParams} from 'react-router-dom';
+import {Link, useNavigate, useParams} from 'react-router-dom';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {AppRoute, AuthorizationStatus, TabsName} from '../../const';
 import {TabName} from '../../types/types';
@@ -22,6 +22,7 @@ function MoviePage(): JSX.Element | null {
   const film = useAppSelector(getFilm);
   const isFilmLoading = useAppSelector(getIsFilmLoading);
   const comments = useAppSelector(getComments);
+  const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState('Overview');
 
@@ -46,15 +47,11 @@ function MoviePage(): JSX.Element | null {
     setActiveTab(tab);
   }, []);
 
-  if (isFilmLoading) {
+  if (isFilmLoading || !film) {
     return <Spinner />;
   }
 
-  if (!film) {
-    return null;
-  }
-
-  const { id, name, posterImage, previewImage, backgroundImage, backgroundColor, videoLink, previewVideoLink, description, rating, scoresCount, director, starring, runTime, genre, released, isFavorite } = film;
+  const { id, name, posterImage, backgroundImage, previewVideoLink, description, rating, scoresCount, director, starring, runTime, genre, released, isFavorite } = film;
 
   return (
     <>
@@ -77,7 +74,7 @@ function MoviePage(): JSX.Element | null {
               </p>
 
               <div className="film-card__buttons">
-                <button className="btn btn--play film-card__button" type="button">
+                <button className="btn btn--play film-card__button" type="button" onClick={() => navigate('/player')}>
                   <svg viewBox="0 0 19 19" width="19" height="19">
                     <use xlinkHref="#play-s"></use>
                   </svg>

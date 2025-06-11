@@ -42,6 +42,7 @@ export const siteData = createSlice({
       })
       .addCase(fetchPromoFilm.fulfilled, (state, action) => {
         state.promoFilm = action.payload;
+        state.film = action.payload;
         state.isPromoFilmLoading = false;
       })
       .addCase(fetchPromoFilm.rejected, (state) => {
